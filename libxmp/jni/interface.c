@@ -33,7 +33,7 @@ METHOD(jint, xmpLoadModule) (JNIEnv *env, jobject obj, jlong ctx, jstring path)
 	return res;
 }
 
-METHOD(jboolean, xmpTestModule) (JNIEnv *env, jobject obj, jstring path, jobject info)
+METHOD(jint, xmpTestModule) (JNIEnv *env, jobject obj, jstring path, jobject info)
 {
 	const char *filename;
 	int res;
@@ -43,7 +43,7 @@ METHOD(jboolean, xmpTestModule) (JNIEnv *env, jobject obj, jstring path, jobject
 	res = xmp_test_module((char *)filename, &ti);
 	(*env)->ReleaseStringUTFChars(env, path, filename);
 
-	if (res == 0) {
+	if (res < 0) {
 		jclass modInfoClass = (*env)->FindClass(env,
 	                        	"org/helllabs/java/libxmp/TestInfo");
 		jfieldID field;
@@ -60,11 +60,9 @@ METHOD(jboolean, xmpTestModule) (JNIEnv *env, jobject obj, jstring path, jobject
 					"Ljava/lang/String;");
 		(*env)->SetObjectField(env, info, field,
 					(*env)->NewStringUTF(env, ti.type));
-
-		return JNI_TRUE;
 	}
 
-	return JNI_FALSE;
+	return res;
 }
 
 METHOD(void, xmpReleaseModule) (JNIEnv *env, jobject obj, jlong ctx)
