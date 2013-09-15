@@ -65,7 +65,7 @@ public class Player {
 			if (!Xmp.testModule(arg, ti))
 				continue;
 
-			System.out.println("Playing " + arg + "...");
+			System.out.println("\nPlaying " + arg + "...");
 
 			try {
 				player.play(arg);
@@ -73,9 +73,10 @@ public class Player {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			System.out.print("\n");
 		}
 
-		System.out.println("\nEnd");
+		System.out.println("End");
 
 	}
 
