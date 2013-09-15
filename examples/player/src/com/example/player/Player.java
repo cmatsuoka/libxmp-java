@@ -14,6 +14,19 @@ import org.helllabs.java.libxmp.*;
 public class Player {
 	private int oldPos = -1;
 
+	private void showInfo(FrameInfo fi) {
+		if (fi.pos != oldPos) {
+			System.out.printf("Pos: %d, Pattern: %d\r", fi.pos, fi.pattern);
+			oldPos = fi.pos;
+		}
+	}
+	
+	private void showHeader(Module mod) {
+		System.out.println("Module name  : " + mod.name);
+		System.out.println("Module type  : " + mod.type);
+		System.out.println("Module length: " + mod.len + " patterns");
+	}
+	
 	private void play(String path) throws LineUnavailableException {
 		AudioPlay audio = new AudioPlay(44100);
 
@@ -21,9 +34,7 @@ public class Player {
 		Module mod;
 		try {
 			mod = xmp.loadModule(path);
-			System.out.println(mod.name + " (" + mod.type + ")");
-			System.out.println("Patterns: " + mod.pat + "  Length: " + mod.len);
-
+			showHeader(mod);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -43,14 +54,6 @@ public class Player {
 		xmp.releaseModule();
 
 	}
-
-	private void showInfo(final FrameInfo fi) {
-		if (fi.pos != oldPos) {
-			System.out.println("Pos: " + fi.pos + ", Pattern: " + fi.pattern);
-			oldPos = fi.pos;
-		}
-	}
-
 
 	public static void main(String[] args) {
 		System.out.println("Libxmp player test");
@@ -72,7 +75,7 @@ public class Player {
 			}
 		}
 
-		System.out.println("End");
+		System.out.println("\nEnd");
 
 	}
 

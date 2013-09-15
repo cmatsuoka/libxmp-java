@@ -7,6 +7,7 @@
 package com.example.player;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import javax.sound.sampled.*;
 
@@ -18,8 +19,9 @@ public class AudioPlay {
 	byte[] myBuffer;
 
 	public AudioPlay(int freq) throws LineUnavailableException {
-		AudioFormat format = new AudioFormat(freq, 16, 2, true, false);
-		DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+		final boolean isBigEndian = ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN;
+		final AudioFormat format = new AudioFormat(freq, 16, 2, true, isBigEndian);
+		final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
 		if (!AudioSystem.isLineSupported(info)){
 			System.out.println("Line matching " + info + " is not supported.");
@@ -38,8 +40,7 @@ public class AudioPlay {
 		close();
 	}
 	
-	public void play(ByteBuffer buffer, int bufferSize) {
-		
+	public void play(ByteBuffer buffer, int bufferSize) {	
 		buffer.clear();
 		buffer.get(myBuffer, 0, bufferSize);
 		line.write(myBuffer, 0, bufferSize);

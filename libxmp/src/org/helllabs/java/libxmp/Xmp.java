@@ -75,6 +75,7 @@ public class Xmp {
 	protected native int getErrno();
 	protected native String getStrError(int err);
 	protected native void getModData(long ctx, Module mod);
+	protected native void getInstrumentData(long ctx, Instrument instrument, int num);
 
 
 	public Xmp() {
@@ -94,6 +95,15 @@ public class Xmp {
 		
 		mod = new Module();
 		getModData(ctx, mod);
+		mod.xxp = new Pattern[mod.pat];
+		mod.xxt = new Track[mod.trk];
+		mod.xxi = new Instrument[mod.ins];
+		mod.xxs = new Sample[mod.smp];
+		
+		for (int i = 0; i < mod.ins; i++) {
+			mod.xxi[i] = new Instrument();
+			getInstrumentData(ctx, mod.xxi[i], i);
+		}
 		
 		return mod;
 	}

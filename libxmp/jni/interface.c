@@ -253,3 +253,32 @@ METHOD(void, getModData) (JNIEnv *env, jobject obj, jlong ctx, jobject mod)
 	field = (*env)->GetFieldID(env, modInfoClass, "gvl", "I");
 	(*env)->SetIntField(env, mod, field, mi.mod->gvl);
 }
+
+METHOD(void, getInstrumentData) (JNIEnv *env, jobject obj, jlong ctx, jobject instrument, jint num)
+{
+	struct xmp_module_info mi;
+	struct xmp_instrument *xxi;
+	jclass instrumentInfoClass;
+	jfieldID field;
+
+	xmp_get_module_info((xmp_context)ctx, &mi);
+	xxi = &mi.mod->xxi[num];
+
+	instrumentInfoClass = (*env)->FindClass(env,
+                       		"org/helllabs/java/libxmp/Instrument");
+
+	field = (*env)->GetFieldID(env, instrumentInfoClass, "name",
+				"Ljava/lang/String;");
+	(*env)->SetObjectField(env, instrument, field,
+				(*env)->NewStringUTF(env, xxi->name));
+
+	field = (*env)->GetFieldID(env, instrumentInfoClass, "vol", "I");
+	(*env)->SetIntField(env, instrument, field, xxi->vol);
+
+	field = (*env)->GetFieldID(env, instrumentInfoClass, "nsm", "I");
+	(*env)->SetIntField(env, instrument, field, xxi->nsm);
+
+	field = (*env)->GetFieldID(env, instrumentInfoClass, "rls", "I");
+	(*env)->SetIntField(env, instrument, field, xxi->rls);
+
+}
