@@ -4,17 +4,28 @@ import java.io.IOException;
 
 public class Xmp {
 	
-	// constants
+	// limits
+	public static final int MAX_KEYS = 121;			/* Number of valid keys */
+	public static final int MAX_ENV_POINTS = 32;	/* Max number of envelope points */
+	public static final int MAX_MOD_LENGTH = 256;	/* Max number of patterns in module */
+	public static final int MAX_CHANNELS = 64;		/* Max number of channels in module */
+	public static final int MAX_SRATE = 49170;		/* max sampling rate (Hz) */
+	public static final int MIN_SRATE = 4000;		/* min sampling rate (Hz) */
+	public static final int MIN_BPM = 20;			/* min BPM */
+	/* frame rate = (50 * bpm / 125) Hz */
+	/* frame size = (sampling rate * channels * size) / frame rate */
+	public static final int MAX_FRAMESIZE = 5 * MAX_SRATE * 2 / MIN_BPM;
+
+	// error codes
 	public static final int ERROR_INTERNAL = 2;
 	public static final int ERROR_SYSTEM = 6;
 	public static final int ERROR_INVALID = 7;
 	
-	public static final int MAX_MOD_LENGTH = 256;
 
-	private long ctx;
+	private final long ctx;
 	private Module mod;
 
-	private String[] error = {
+	private static final String[] error = {
 		"No error",
 		"End of module",
 		"Internal error",

@@ -118,6 +118,14 @@ METHOD(jobject, xmpGetFrameInfo) (JNIEnv *env, jobject obj, jlong ctx, jobject i
 	field = (*env)->GetFieldID(env, frameInfoClass, "frameTime", "I");
 	(*env)->SetIntField(env, info, field, fi.frame_time);
 
+	field = (*env)->GetFieldID(env, frameInfoClass,
+				"buffer", "Ljava/nio/ByteBuffer;");
+	if ((*env)->GetObjectField(env, info, field) == NULL) {
+		jobject buf = (*env)->NewDirectByteBuffer(env, fi.buffer,
+						XMP_MAX_FRAMESIZE);
+		(*env)->SetObjectField(env, info, field, buf);
+	}
+
 	field = (*env)->GetFieldID(env, frameInfoClass, "bufferSize", "I");
 	(*env)->SetIntField(env, info, field, fi.buffer_size);
 

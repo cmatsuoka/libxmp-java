@@ -21,4 +21,6 @@ public class FrameInfo {
 	public int virtChannels;	/* Number of virtual channels */
 	public int virtUsed;		/* Used virtual channels */
 	public int sequence;		/* Current sequence */
+	
+	
 }
