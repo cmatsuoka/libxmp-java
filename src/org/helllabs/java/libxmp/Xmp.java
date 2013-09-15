@@ -27,7 +27,7 @@ public class Xmp {
 	protected native void xmpFreeContext(long ctx);
 	protected native int xmpLoadModule(long ctx, String path);
 	protected native static int xmpTestModule(String path, TestInfo info);
-	protected native int xmpReleaseModule(long ctx);
+	protected native void xmpReleaseModule(long ctx);
 	protected native int xmpStartPlayer(long ctx, int freq, int mode);
 	protected native int xmpPlayFrame(long ctx);
 	protected native void xmpGetFrameInfo(long ctx, FrameInfo info);
@@ -44,7 +44,7 @@ public class Xmp {
 		xmpFreeContext(ctx);
 	}
 
-	public Module xmpLoadModule(String path) throws IOException {
+	public Module loadModule(String path) throws IOException {
 		final int code = xmpLoadModule(ctx, path);
 		if (code < 0) {
 			throw new IOException(error[-code]);
@@ -107,7 +107,7 @@ public class Xmp {
 	}
 
 	static {
-		System.loadLibrary("xmp");
+		System.loadLibrary("xmp-jni");
 	}
 
 
