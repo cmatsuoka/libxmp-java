@@ -1,5 +1,7 @@
 package org.helllabs.java.libxmp;
 
+import java.nio.ByteBuffer;
+
 public class FrameInfo {
 	public int pos;				/* Current position */
 	public int pattern;			/* Current pattern */
@@ -11,6 +13,7 @@ public class FrameInfo {
 	public int time;			/* Current module time in ms */
 	public int totalTime;		/* Estimated replay time in ms*/
 	public int frameTime;		/* Frame replay time in us */
+	public ByteBuffer buffer;	/* Sound buffer */
 	public int bufferSize;		/* Used buffer size */
 	public int totalSize;		/* Total buffer size */
 	public int volume;			/* Current master volume */

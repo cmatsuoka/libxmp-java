@@ -5,11 +5,14 @@ import java.io.IOException;
 public class Xmp {
 	
 	// constants
-	public final static int ERROR_INTERNAL = 2;
-	public final static int ERROR_SYSTEM = 6;
-	public final static int ERROR_INVALID = 7;
+	public static final int ERROR_INTERNAL = 2;
+	public static final int ERROR_SYSTEM = 6;
+	public static final int ERROR_INVALID = 7;
+	
+	public static final int MAX_MOD_LENGTH = 256;
 
 	private long ctx;
+	private Module mod;
 
 	private String[] error = {
 		"No error",
@@ -22,7 +25,7 @@ public class Xmp {
 		"Invalid parameter"
 	};
 
-	// native methods
+	// native API methods
 	protected native long xmpCreateContext();
 	protected native void xmpFreeContext(long ctx);
 	protected native int xmpLoadModule(long ctx, String path);
@@ -32,7 +35,12 @@ public class Xmp {
 	protected native int xmpPlayFrame(long ctx);
 	protected native void xmpGetFrameInfo(long ctx, FrameInfo info);
 	protected native void xmpEndPlayer(long ctx);
+	protected native void xmpGetModuleInfo(long ctx, ModuleInfo info);
+	
+	// native helpers
 	protected native int getErrno();
+	protected native String getStrError(int err);
+	protected native void getModData(long ctx, Module mod);
 
 
 	public Xmp() {
@@ -50,7 +58,10 @@ public class Xmp {
 			throw new IOException(error[-code]);
 		}
 		
-		return new Module();
+		mod = new Module();
+		getModData(ctx, mod);
+		
+		return mod;
 	}
 	
 	public static boolean testModule(String path, TestInfo info) {
@@ -104,6 +115,18 @@ public class Xmp {
 	
 	public void endPlayer() {
 		xmpEndPlayer(ctx);
+	}
+	
+	public ModuleInfo getModuleInfo(ModuleInfo info) {
+		if (info == null)
+			info = new ModuleInfo();
+		xmpGetModuleInfo(ctx, info);
+		info.mod = mod;
+		return info;
+	}
+	
+	public ModuleInfo getModuleInfo() {
+		return getModuleInfo(null);
 	}
 
 	static {
