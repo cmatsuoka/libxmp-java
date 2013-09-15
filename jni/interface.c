@@ -72,7 +72,7 @@ METHOD(void, xmpReleaseModule) (JNIEnv *env, jobject obj, jlong ctx)
 	xmp_release_module((xmp_context)ctx);
 }
 
-METHOD(jint, xmpStartPlayer) (JNIEnv *env, jobject obj, jlong ctx, jint start, jint rate, jint flags)
+METHOD(jint, xmpStartPlayer) (JNIEnv *env, jobject obj, jlong ctx, jint rate, jint flags)
 {
 	return xmp_start_player((xmp_context)ctx, rate, flags);
 }
