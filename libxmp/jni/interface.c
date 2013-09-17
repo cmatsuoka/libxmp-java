@@ -11,17 +11,17 @@ Java_org_helllabs_java_libxmp_Xmp_##name
  * Native API methods
  */
 
-METHOD(jlong, xmpCreateContext) (JNIEnv *env, jobject obj)
+METHOD(jlong, createContext) (JNIEnv *env, jobject obj)
 {
         return (jlong)xmp_create_context();
 }
 
-METHOD(void, xmpFreeContext) (JNIEnv *env, jobject obj, jlong ctx)
+METHOD(void, freeContext) (JNIEnv *env, jobject obj, jlong ctx)
 {
         xmp_free_context((xmp_context)ctx);
 }
 
-METHOD(jint, xmpLoadModule) (JNIEnv *env, jobject obj, jlong ctx, jstring path)
+METHOD(jint, loadModule) (JNIEnv *env, jobject obj, jlong ctx, jstring path)
 {
 	const char *filename;
 	int res;
@@ -33,7 +33,7 @@ METHOD(jint, xmpLoadModule) (JNIEnv *env, jobject obj, jlong ctx, jstring path)
 	return res;
 }
 
-METHOD(jint, xmpTestModule) (JNIEnv *env, jobject obj, jstring path, jobject info)
+METHOD(jint, testModule) (JNIEnv *env, jobject obj, jstring path, jobject info)
 {
 	const char *filename;
 	int res;
@@ -65,17 +65,17 @@ METHOD(jint, xmpTestModule) (JNIEnv *env, jobject obj, jstring path, jobject inf
 	return res;
 }
 
-METHOD(void, xmpReleaseModule) (JNIEnv *env, jobject obj, jlong ctx)
+METHOD(void, releaseModule) (JNIEnv *env, jobject obj, jlong ctx)
 {
 	xmp_release_module((xmp_context)ctx);
 }
 
-METHOD(jint, xmpStartPlayer) (JNIEnv *env, jobject obj, jlong ctx, jint rate, jint flags)
+METHOD(jint, startPlayer) (JNIEnv *env, jobject obj, jlong ctx, jint rate, jint flags)
 {
 	return xmp_start_player((xmp_context)ctx, rate, flags);
 }
 
-METHOD(jobject, xmpGetFrameInfo) (JNIEnv *env, jobject obj, jlong ctx, jobject info)
+METHOD(jobject, getFrameInfo) (JNIEnv *env, jobject obj, jlong ctx, jobject info)
 {
 	struct xmp_frame_info fi;
 	jclass frameInfoClass;
@@ -148,17 +148,17 @@ METHOD(jobject, xmpGetFrameInfo) (JNIEnv *env, jobject obj, jlong ctx, jobject i
 	return info;
 }
 
-METHOD(jint, xmpPlayFrame) (JNIEnv *env, jobject obj, jlong ctx)
+METHOD(jint, playFrame) (JNIEnv *env, jobject obj, jlong ctx)
 {
 	return xmp_play_frame((xmp_context)ctx);
 }
 
-METHOD(void, xmpEndPlayer) (JNIEnv *env, jobject obj, jlong ctx)
+METHOD(void, endPlayer) (JNIEnv *env, jobject obj, jlong ctx)
 {
 	xmp_end_player((xmp_context)ctx);
 }
 
-METHOD(jobject, xmpGetModuleInfo) (JNIEnv *env, jobject obj, jlong ctx, jobject info)
+METHOD(jobject, getModuleInfo) (JNIEnv *env, jobject obj, jlong ctx, jobject info)
 {
 	struct xmp_module_info mi;
 	jclass modInfoClass;
