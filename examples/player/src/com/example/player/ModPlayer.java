@@ -27,34 +27,30 @@ public class ModPlayer {
 		System.out.println("Module length: " + mod.len + " patterns");
 	}
 
-	private void playModule(Player player, final AudioPlay audio, String path) throws IOException {
-
-		Module mod = new Module(player, path);
-		showHeader(mod);
-
-		mod.setOnFrameListener(new Module.OnFrameListener() {
-			@Override
-			public void onFrame(FrameInfo fi) {
-				audio.play(fi.buffer, fi.bufferSize);
-				showInfo(fi);
-			}
-		});
-		
-		mod.play();
-	}
-
 	private void run(String[] args) throws LineUnavailableException {
 
-		Player player = new Player(44100);
-		AudioPlay audio = new AudioPlay(44100);
+		final Player player = new Player(44100);
+		final AudioPlay audio = new AudioPlay(44100);
 
 		for (String arg : args) {
-			if (!Module.test(arg))
-				continue;
-
-			System.out.println("\nPlaying " + arg + "...");
 			try {
-				playModule(player, audio, arg);
+				if (!Module.test(arg))
+					continue;
+
+				System.out.println("\nPlaying " + arg + "...");
+				
+				Module mod = new Module(player, arg);
+				showHeader(mod);
+				
+				mod.setOnFrameListener(new Module.OnFrameListener() {
+					@Override
+					public void onFrame(FrameInfo fi) {
+						audio.play(fi.buffer, fi.bufferSize);
+						showInfo(fi);
+					}
+				});
+
+				mod.play();
 			} catch (IOException e) {
 				System.out.println("Can't play " + arg);
 			}

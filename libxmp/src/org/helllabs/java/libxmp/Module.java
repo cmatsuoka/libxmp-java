@@ -57,6 +57,10 @@ public class Module {
 			// do nothing
 		}
 	}
+	
+	public Module(String path) throws IOException {
+		this(new Player(), path);
+	}
 
 	public Module(Player player, String path) throws IOException {
 		
@@ -78,6 +82,12 @@ public class Module {
 			this.xxi[i] = new Instrument();
 			Xmp.getInstrumentData(ctx, this.xxi[i], i);
 		}
+		
+		for (int i = 0; i < this.pat; i++) {
+			this.xxp[i] = new Pattern(this);
+			Xmp.getInstrumentData(ctx, this.xxi[i], i);
+		}
+
 	}
 	
 	@Override
@@ -91,14 +101,20 @@ public class Module {
 	}
 	
 	
-	public static boolean test(String path, TestInfo info) {
+	public static boolean test(String path, TestInfo info) throws IOException {
 		if (info == null)
 			info = new TestInfo();
 		final int code = Xmp.testModule(path, info);
+		
+		if (code == -Xmp.ERROR_SYSTEM) {
+			throw new IOException(Xmp.getStrError(Xmp.getErrno()));
+		}
+		// check file not found
+		
 		return code == 0;
 	}
 	
-	public static boolean test(String path) {
+	public static boolean test(String path) throws IOException {
 		return test(path, null);
 	}
 	
