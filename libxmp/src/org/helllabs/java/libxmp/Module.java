@@ -24,6 +24,7 @@
 package org.helllabs.java.libxmp;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class Module {
 	private final Player player;	// Xmp player
@@ -101,47 +102,28 @@ public class Module {
 		return test(path, null);
 	}
 	
-	public Pattern getPattern(int num) {
-		return num < pat ? xxp[num] : null;
-	}
-	
-	public Track getTrack(int num) {
-		return num < trk ? xxt[num] : null;
-	}
-	
-	public Instrument getInstrument(int num) {
-		return num < ins ? xxi[num] : null;
-	}
-	
-	public Sample getSample(int num) {
-		return num < smp ? xxs[num] : null;
-	}
-	
-	public Channel getChannel(int num) {
-		return num < Xmp.MAX_CHANNELS ? xxc[num] : null;
-	}
-	
-	public int getPosition(int num) {
-		return num < len ? xxo[num] : -1;
-	}
-	
 	
 	public void setOnFrameListener(OnFrameListener listener) {
 		onFrameListener = listener;
 	}
 	
-	public FrameInfo playFrame(FrameInfo fi) {		
+	public Module playFrame(FrameInfo fi) {		
 		Xmp.playFrame(ctx);
 		getFrameInfo(fi);
 		
 		if (onFrameListener != null)
 			onFrameListener.onFrame(fi);
 		
-		return fi;
+		return this;
 	}
 	
-	public void playBuffer() {
-		
+	public Module resetBuffer() {
+		return this;
+	}
+	
+	public Module playBuffer(ByteBuffer buffer, int bufferSize, boolean loop) {
+
+		return this;
 	}
 	
 	public void play() {
@@ -169,5 +151,37 @@ public class Module {
 			info = new ModuleInfo();
 		Xmp.getModuleInfo(ctx, info);
 		return info;
+	}
+	
+	public Pattern getPattern(int num) {
+		return num < pat ? xxp[num] : null;
+	}
+	
+	public Track getTrack(int num) {
+		return num < trk ? xxt[num] : null;
+	}
+	
+	public Instrument getInstrument(int num) {
+		return num < ins ? xxi[num] : null;
+	}
+	
+	public Sample getSample(int num) {
+		return num < smp ? xxs[num] : null;
+	}
+	
+	public Channel getChannel(int num) {
+		return num < Xmp.MAX_CHANNELS ? xxc[num] : null;
+	}
+	
+	public int getPosition(int num) {
+		return num < len ? xxo[num] : -1;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public String getType() {
+		return type;
 	}
 }

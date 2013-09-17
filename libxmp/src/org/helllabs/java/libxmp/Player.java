@@ -25,11 +25,9 @@ package org.helllabs.java.libxmp;
 
 
 public class Player {
-
 	private final int samplingRate;
 	private final int mode;
 	private final long ctx;
-	private Module mod;
 	
 	public Player() {
 		this(44100);
@@ -74,34 +72,6 @@ public class Player {
 	
 	public void end() {
 		Xmp.endPlayer(ctx);
-	}
-	
-	public boolean playFrame() {
-		return Xmp.playFrame(ctx) == 0;
-	}
-
-	public FrameInfo getFrameInfo(FrameInfo info) {
-		if (info == null)
-			info = new FrameInfo();
-		Xmp.getFrameInfo(ctx, info);
-		return info;
-	}
-	
-	public FrameInfo getFrameInfo() {
-		return getFrameInfo(null);
-	}
-
-	
-	public ModuleInfo getModuleInfo(ModuleInfo info) {
-		if (info == null)
-			info = new ModuleInfo();
-		Xmp.getModuleInfo(ctx, info);
-		info.mod = mod;
-		return info;
-	}
-	
-	public ModuleInfo getModuleInfo() {
-		return getModuleInfo(null);
 	}
 
 }
