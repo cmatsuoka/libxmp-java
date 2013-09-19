@@ -67,7 +67,6 @@ public class Player {
 			
 			
 		}
-		System.out.println("code=" + code);
 	}
 	
 	public void end() {

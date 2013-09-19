@@ -31,16 +31,17 @@ public class ModPlayer {
 
 		Module mod = new Module(player, path);
 		showHeader(mod);
-
-		mod.setOnFrameListener(new Module.OnFrameListener() {
+		
+		Module.Callback callback = new Module.Callback() {
 			@Override
-			public void onFrame(FrameInfo fi) {
+			public boolean callback(Module mod, FrameInfo fi, Object args) {
 				audio.play(fi.buffer, fi.bufferSize);
 				showInfo(fi);
+				return true;
 			}
-		});
+		};
 		
-		mod.play();
+		mod.play(callback);
 	}
 
 	private void run(String[] args) throws LineUnavailableException {

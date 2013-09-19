@@ -48,13 +48,11 @@ public class Module {
 	private final Instrument xxi[];	// Instruments
 	private final Sample xxs[];		// Samples
 	private final Channel xxc[] = new Channel[Xmp.MAX_CHANNELS];	// Channel info
-	private byte xxo[] = new byte[Xmp.MAX_MOD_LENGTH];				// Orders
+	private byte xxo[] = new byte[Xmp.MAX_MOD_LENGTH];				// Orders;
 	
-	private OnFrameListener onFrameListener;
-	
-	public static class OnFrameListener {
-		public void onFrame(FrameInfo fi) {
-			// do nothing
+	public static class Callback {
+		public boolean callback(Module mod, FrameInfo fi, Object args) {
+			return true;
 		}
 	}
 
@@ -102,18 +100,14 @@ public class Module {
 		return test(path, null);
 	}
 	
-	
-	public void setOnFrameListener(OnFrameListener listener) {
-		onFrameListener = listener;
+	public Module playFrame() {
+		Xmp.playFrame(ctx);
+		return this;
 	}
 	
 	public Module playFrame(FrameInfo fi) {		
 		Xmp.playFrame(ctx);
 		getFrameInfo(fi);
-		
-		if (onFrameListener != null)
-			onFrameListener.onFrame(fi);
-		
 		return this;
 	}
 	
@@ -127,15 +121,31 @@ public class Module {
 	}
 	
 	public void play() {
-		play(false);
+		play(null, false, null);
 	}
 	
-	public void play(boolean loop) {
+	public void play(Callback callback) {
+		play(callback, false, null);
+	}
+	
+	public void play(Callback callback, boolean loop) {
+		play(callback, loop, null);
+	}
+	
+	public void play(Callback callback, boolean loop, Object args) {
 		FrameInfo fi = new FrameInfo();
 		player.start();
-		do {
+		while (true) {
 			playFrame(fi);
-		} while (loop || fi.loopCount == 0);
+			
+			if (!loop && fi.loopCount > 0)
+				break;
+			
+			if (callback != null) {
+				if (!callback.callback(this, fi, args))
+					break;
+			}	
+		}
 		player.end();
 	}
 	
