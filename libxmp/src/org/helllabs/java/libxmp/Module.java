@@ -92,20 +92,21 @@ public class Module {
 	}
 	
 	
-	public static boolean test(String path, TestInfo info) throws IOException {
+	public static TestInfo test(String path, TestInfo info) throws IOException {
 		if (info == null)
 			info = new TestInfo();
 		final int code = Xmp.testModule(path, info);
 		
 		if (code == -Xmp.ERROR_SYSTEM) {
 			throw new IOException(Xmp.getStrError(Xmp.getErrno()));
+		} else if (code < 0) {
+			throw new IOException(Xmp.errorString[-code]);
 		}
-		// check file not found
 		
-		return code == 0;
+		return info;
 	}
 	
-	public static boolean test(String path) throws IOException {
+	public static TestInfo test(String path) throws IOException {
 		return test(path, null);
 	}
 	

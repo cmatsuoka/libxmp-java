@@ -52,12 +52,11 @@ public class ModPlayer {
 		for (String arg : args) {
 		
 			try {
-				if (!Module.test(arg))
-					continue;
+				Module.test(arg);
 				System.out.println("\nPlaying " + arg + "...");
 				playModule(player, audio, arg);
 			} catch (IOException e) {
-				System.out.print("\nCan't play " + arg);
+				System.out.print("\nCan't play " + arg + ": " + e.getMessage());
 			}
 			System.out.print("\n");
 		}
@@ -71,7 +70,6 @@ public class ModPlayer {
 		} catch (LineUnavailableException e) {
 			System.out.println("Can't initialize audio");
 		}
-		System.out.println("End");
 	}
 
 }
