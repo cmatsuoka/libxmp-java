@@ -46,7 +46,7 @@ public class Module {
 	private final Track xxt[];		// Tracks
 	private final Instrument xxi[];	// Instruments
 	private final Sample xxs[];		// Samples
-	private final Channel xxc[] = new Channel[Xmp.MAX_CHANNELS];	// Channel info
+	private final Channel xxc[];	// Channel info
 	private byte xxo[] = new byte[Xmp.MAX_MOD_LENGTH];				// Orders;
 	
 	public Module(String path) throws IOException {
@@ -68,6 +68,7 @@ public class Module {
 		this.xxt = new Track[this.trk];
 		this.xxi = new Instrument[this.ins];
 		this.xxs = new Sample[this.smp];
+		this.xxc = new Channel[this.chn];
 		
 		for (int i = 0; i < this.ins; i++) {
 			this.xxi[i] = new Instrument();

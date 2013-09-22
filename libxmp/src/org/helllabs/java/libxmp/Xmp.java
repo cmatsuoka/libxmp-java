@@ -66,6 +66,18 @@ public class Xmp {
 	native static void getFrameInfo(long ctx, FrameInfo info);
 	native static void endPlayer(long ctx);
 	native static void getModuleInfo(long ctx, ModuleInfo info);
+	native static int setPlayer(long ctx, int param, int value);
+	native static int getPlayer(long ctx, int param);
+	native static int injectEvent(long ctx, int chn, Event event);
+	native static String[] getFormatList();
+	native static int nextPosition(long ctx);
+	native static int prevPosition(long ctx);
+	native static int setPosition(long ctx, int num);
+	native static void scanModule(long ctx);
+	native static void stopModule(long ctx);
+	native static void restartModule(long ctx);
+	native static int seekTime(long ctx, int time);
+	native static int channelMute(long ctx, int chn, int val);
 	
 	// native helpers
 	native static int getErrno();

@@ -79,26 +79,47 @@ public class Player {
 		return this;
 	}
 	
-	public Player playFrame() {
-		Xmp.playFrame(ctx);
-		return this;
-	}
-	
-	public Player playFrame(FrameInfo fi) {		
-		Xmp.playFrame(ctx);
-		getFrameInfo(fi);
-		return this;
-	}
-	
-	public Player resetBuffer() {
-		return this;
-	}
-	
-	public Player playBuffer(ByteBuffer buffer, int bufferSize, boolean loop) {
+    public Player end() {
+        Xmp.endPlayer(ctx);
+        return this;
+    }
 
-		return this;
-	}
-	
+    public void set(int param, int value) {
+        final int code = Xmp.setPlayer(ctx, param, value);
+        if (code == Xmp.ERROR_INVALID) {
+        	throw new IllegalArgumentException("Invalid value " + value);
+        }
+    }
+
+    public int get(int param) {
+        return Xmp.getPlayer(ctx, param);
+    }
+
+    public void inject_event(int chn, Event event) {
+        Xmp.injectEvent(ctx, chn, event);
+    }
+
+    public static String[] getFormatList() {
+        return Xmp.getFormatList();
+    }
+
+    public int nextPosition() {
+        return Xmp.nextPosition(ctx);
+    }
+
+    public int prevPosition() {
+    	return Xmp.prevPosition(ctx);
+    }
+
+    public int setPosition(int num) {
+    	return Xmp.setPosition(ctx, num);
+    }
+
+    public Player scan() {
+    	Xmp.scanModule(ctx);
+    	return this;
+    }
+
 	public Player play() {
 		return play(null, false, null);
 	}
@@ -129,6 +150,31 @@ public class Player {
 		
 		return this;
 	}
+
+	public Player playFrame() {
+		Xmp.playFrame(ctx);
+		return this;
+	}
+	
+	public Player playFrame(FrameInfo fi) {		
+		Xmp.playFrame(ctx);
+		getFrameInfo(fi);
+		return this;
+	}
+	
+	public Player resetBuffer() {
+		return this;
+	}
+	
+	public Player playBuffer(ByteBuffer buffer, int bufferSize, boolean loop) {
+
+		return this;
+	}
+	
+	public Player stop() {
+		Xmp.stopModule(ctx);
+		return this;
+	}
 	
 	public FrameInfo getFrameInfo(FrameInfo info) {
 		if (info == null)
@@ -137,9 +183,25 @@ public class Player {
 		return info;
 	}
 	
-
-	public void end() {
-		Xmp.endPlayer(ctx);
+	public Player restart() {
+		Xmp.restartModule(ctx);
+		return this;
 	}
+	
+    public int seekTime(int time) {
+        return Xmp.seekTime(ctx, time);
+    }
+
+    /*
+    public int channelMute(int chn, int val) {
+        return Xmp.channelMute(ctx, chn, val);
+    }
+
+    public int channelVol(int chn, int val):
+        return xmp_channel_vol(self._ctx, chn, val)
+
+    def set_instrument_path(self, path):
+        return xmp_set_instrument_path(self._ctx, path)
+    */
 
 }
