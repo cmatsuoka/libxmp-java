@@ -24,7 +24,6 @@
 package org.helllabs.java.libxmp;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 public class Module {
 	private final Player player;	// Xmp player
@@ -50,17 +49,11 @@ public class Module {
 	private final Channel xxc[] = new Channel[Xmp.MAX_CHANNELS];	// Channel info
 	private byte xxo[] = new byte[Xmp.MAX_MOD_LENGTH];				// Orders;
 	
-	public static class Callback {
-		public boolean callback(Module mod, FrameInfo fi, Object args) {
-			return true;
-		}
-	}
-	
 	public Module(String path) throws IOException {
-		this(new Player(), path);
+		this(path, new Player());
 	}
 
-	public Module(Player player, String path) throws IOException {
+	public Module(String path, Player player) throws IOException {
 		
 		this.player = player;
 		this.ctx = player.getContext();
@@ -83,7 +76,7 @@ public class Module {
 		
 		for (int i = 0; i < this.pat; i++) {
 			this.xxp[i] = new Pattern(this);
-			Xmp.getInstrumentData(ctx, this.xxi[i], i);
+			//Xmp.getPatternData(ctx, this.xxp[i], i);
 		}
 
 	}
@@ -114,62 +107,6 @@ public class Module {
 	
 	public static boolean test(String path) throws IOException {
 		return test(path, null);
-	}
-	
-	public Module playFrame() {
-		Xmp.playFrame(ctx);
-		return this;
-	}
-	
-	public Module playFrame(FrameInfo fi) {		
-		Xmp.playFrame(ctx);
-		getFrameInfo(fi);
-		return this;
-	}
-	
-	public Module resetBuffer() {
-		return this;
-	}
-	
-	public Module playBuffer(ByteBuffer buffer, int bufferSize, boolean loop) {
-
-		return this;
-	}
-	
-	public void play() {
-		play(null, false, null);
-	}
-	
-	public void play(Callback callback) {
-		play(callback, false, null);
-	}
-	
-	public void play(Callback callback, boolean loop) {
-		play(callback, loop, null);
-	}
-	
-	public void play(Callback callback, boolean loop, Object args) {
-		FrameInfo fi = new FrameInfo();
-		player.start();
-		while (true) {
-			playFrame(fi);
-			
-			if (!loop && fi.loopCount > 0)
-				break;
-			
-			if (callback != null) {
-				if (!callback.callback(this, fi, args))
-					break;
-			}	
-		}
-		player.end();
-	}
-	
-	public FrameInfo getFrameInfo(FrameInfo info) {
-		if (info == null)
-			info = new FrameInfo();
-		Xmp.getFrameInfo(ctx, info);
-		return info;
 	}
 	
 	public ModuleInfo getInfo(ModuleInfo info) {
@@ -209,5 +146,9 @@ public class Module {
 	
 	public String getType() {
 		return type;
+	}
+	
+	public Player getPlayer() {
+		return player;
 	}
 }

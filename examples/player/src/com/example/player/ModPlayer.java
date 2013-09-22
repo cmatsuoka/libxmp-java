@@ -29,19 +29,19 @@ public class ModPlayer {
 
 	private void playModule(Player player, final AudioPlay audio, String path) throws IOException {
 
-		Module mod = new Module(player, path);
+		Module mod = new Module(path, player);
 		showHeader(mod);
 		
-		Module.Callback callback = new Module.Callback() {
+		Player.Callback callback = new Player.Callback() {
 			@Override
-			public boolean callback(Module mod, FrameInfo fi, Object args) {
+			public boolean callback(FrameInfo fi, Object args) {
 				audio.play(fi.buffer, fi.bufferSize);
 				showInfo(fi);
 				return true;
 			}
 		};
 		
-		mod.play(callback);
+		player.play(callback);
 	}
 
 	private void run(String[] args) throws LineUnavailableException {
@@ -50,11 +50,11 @@ public class ModPlayer {
 		AudioPlay audio = new AudioPlay(44100);
 
 		for (String arg : args) {
-			if (!Module.test(arg))
-				continue;
-
-			System.out.println("\nPlaying " + arg + "...");
+		
 			try {
+				if (!Module.test(arg))
+					continue;
+				System.out.println("\nPlaying " + arg + "...");
 				playModule(player, audio, arg);
 			} catch (IOException e) {
 				System.out.println("Can't play " + arg);

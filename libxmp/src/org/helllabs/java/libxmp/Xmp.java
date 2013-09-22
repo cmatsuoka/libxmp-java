@@ -72,6 +72,7 @@ public class Xmp {
 	native static String getStrError(int err);
 	native static void getModData(long ctx, Module mod);
 	native static void getInstrumentData(long ctx, Instrument instrument, int num);
+	native static void getPatternData(long ctx, Pattern pattern, int num);
 
 	static {
 		System.loadLibrary("xmp-jni");

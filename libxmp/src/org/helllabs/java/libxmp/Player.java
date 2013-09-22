@@ -23,11 +23,19 @@
 
 package org.helllabs.java.libxmp;
 
+import java.nio.ByteBuffer;
+
 
 public class Player {
 	private final int samplingRate;
 	private final int mode;
 	private final long ctx;
+	
+	public static class Callback {
+		public boolean callback(FrameInfo fi, Object args) {
+			return true;
+		}
+	}
 	
 	public Player() {
 		this(44100);
@@ -52,7 +60,7 @@ public class Player {
 		return ctx;
 	}
 	
-	public void start() {
+	public Player start() {
 		final int code = Xmp.startPlayer(ctx, samplingRate, mode);
 		switch (code) {
 		case -Xmp.ERROR_INTERNAL:
@@ -67,8 +75,69 @@ public class Player {
 			
 			
 		}
+		
+		return this;
 	}
 	
+	public Player playFrame() {
+		Xmp.playFrame(ctx);
+		return this;
+	}
+	
+	public Player playFrame(FrameInfo fi) {		
+		Xmp.playFrame(ctx);
+		getFrameInfo(fi);
+		return this;
+	}
+	
+	public Player resetBuffer() {
+		return this;
+	}
+	
+	public Player playBuffer(ByteBuffer buffer, int bufferSize, boolean loop) {
+
+		return this;
+	}
+	
+	public Player play() {
+		return play(null, false, null);
+	}
+	
+	public Player play(Callback callback) {
+		return play(callback, false, null);
+	}
+	
+	public Player play(Callback callback, boolean loop) {
+		return play(callback, loop, null);
+	}
+	
+	public Player play(Callback callback, boolean loop, Object args) {
+		FrameInfo fi = new FrameInfo();
+		start();
+		while (true) {
+			playFrame(fi);
+			
+			if (!loop && fi.loopCount > 0)
+				break;
+			
+			if (callback != null) {
+				if (!callback.callback(fi, args))
+					break;
+			}	
+		}
+		end();
+		
+		return this;
+	}
+	
+	public FrameInfo getFrameInfo(FrameInfo info) {
+		if (info == null)
+			info = new FrameInfo();
+		Xmp.getFrameInfo(ctx, info);
+		return info;
+	}
+	
+
 	public void end() {
 		Xmp.endPlayer(ctx);
 	}

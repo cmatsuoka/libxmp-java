@@ -258,27 +258,45 @@ METHOD(void, getInstrumentData) (JNIEnv *env, jobject obj, jlong ctx, jobject in
 {
 	struct xmp_module_info mi;
 	struct xmp_instrument *xxi;
-	jclass instrumentInfoClass;
+	jclass instrumentClass;
 	jfieldID field;
 
 	xmp_get_module_info((xmp_context)ctx, &mi);
 	xxi = &mi.mod->xxi[num];
 
-	instrumentInfoClass = (*env)->FindClass(env,
+	instrumentClass = (*env)->FindClass(env,
                        		"org/helllabs/java/libxmp/Instrument");
 
-	field = (*env)->GetFieldID(env, instrumentInfoClass, "name",
+	field = (*env)->GetFieldID(env, instrumentClass, "name",
 				"Ljava/lang/String;");
 	(*env)->SetObjectField(env, instrument, field,
 				(*env)->NewStringUTF(env, xxi->name));
 
-	field = (*env)->GetFieldID(env, instrumentInfoClass, "vol", "I");
+	field = (*env)->GetFieldID(env, instrumentClass, "vol", "I");
 	(*env)->SetIntField(env, instrument, field, xxi->vol);
 
-	field = (*env)->GetFieldID(env, instrumentInfoClass, "nsm", "I");
+	field = (*env)->GetFieldID(env, instrumentClass, "nsm", "I");
 	(*env)->SetIntField(env, instrument, field, xxi->nsm);
 
-	field = (*env)->GetFieldID(env, instrumentInfoClass, "rls", "I");
+	field = (*env)->GetFieldID(env, instrumentClass, "rls", "I");
 	(*env)->SetIntField(env, instrument, field, xxi->rls);
+
+}
+
+METHOD(void, getPatternData) (JNIEnv *env, jobject obj, jlong ctx, jobject pattern, jint num)
+{
+	struct xmp_module_info mi;
+	struct xmp_pattern *xxp;
+	jclass patternClass;
+	jfieldID field;
+
+	xmp_get_module_info((xmp_context)ctx, &mi);
+	xxp = mi.mod->xxp[num];
+
+	patternClass = (*env)->FindClass(env,
+                       		"org/helllabs/java/libxmp/Pattern");
+
+	field = (*env)->GetFieldID(env, patternClass, "rows", "I");
+	(*env)->SetIntField(env, pattern, field, xxp->rows);
 
 }
