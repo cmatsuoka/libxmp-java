@@ -192,16 +192,17 @@ public class Player {
         return Xmp.seekTime(ctx, time);
     }
 
-    /*
     public int channelMute(int chn, int val) {
         return Xmp.channelMute(ctx, chn, val);
     }
 
-    public int channelVol(int chn, int val):
-        return xmp_channel_vol(self._ctx, chn, val)
+    public int channelVol(int chn, int val) {
+        return Xmp.channelVol(ctx, chn, val);
+    }
 
-    def set_instrument_path(self, path):
-        return xmp_set_instrument_path(self._ctx, path)
-    */
+    public Player setInstrumentPath(String path) {
+        Xmp.setInstrumentPath(ctx, path);
+        return this;
+    }
 
 }

@@ -78,6 +78,8 @@ public class Xmp {
 	native static void restartModule(long ctx);
 	native static int seekTime(long ctx, int time);
 	native static int channelMute(long ctx, int chn, int val);
+	native static int channelVol(long ctx, int chn, int val);
+	native static void setInstrumentPath(long ctx, String path);
 	
 	// native helpers
 	native static int getErrno();
