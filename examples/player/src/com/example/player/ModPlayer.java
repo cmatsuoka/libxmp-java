@@ -57,7 +57,7 @@ public class ModPlayer {
 				System.out.println("\nPlaying " + arg + "...");
 				playModule(player, audio, arg);
 			} catch (IOException e) {
-				System.out.println("Can't play " + arg);
+				System.out.print("\nCan't play " + arg);
 			}
 			System.out.print("\n");
 		}
