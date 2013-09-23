@@ -186,6 +186,83 @@ METHOD(jobject, getModuleInfo) (JNIEnv *env, jobject obj, jlong ctx, jobject inf
 	return info;
 }
 
+METHOD(int, setPlayer) (JNIEnv *env, jobject obj, jlong ctx, jint param, jlong value)
+{
+	return xmp_set_player((xmp_context)ctx, param, value);
+}
+
+METHOD(int, getPlayer) (JNIEnv *env, jobject obj, jlong ctx, jint param)
+{
+	return xmp_get_player((xmp_context)ctx, param);
+}
+
+METHOD(jobjectArray, getFormatList) (JNIEnv *env, jobject obj)
+{
+	jobjectArray ret;
+	char **list;
+	int i;
+
+	list = xmp_get_format_list();
+	for (i = 0; list[i]; i++);
+	
+	ret= (jobjectArray)(*env)->NewObjectArray(env, i,  
+				(*env)->FindClass(env, "java/lang/String"),  
+				(*env)->NewStringUTF(env, ""));  
+
+	for (i = 0; i < 5; i++) {  
+		(*env)->SetObjectArrayElement(env, ret, i,
+				(*env)->NewStringUTF(env, list[i]));  
+	} 
+
+	return ret;
+}
+
+METHOD(int, nextPosition) (JNIEnv *env, jobject obj, jlong ctx)
+{
+	return xmp_next_position((xmp_context)ctx);
+}
+
+METHOD(int, prevPosition) (JNIEnv *env, jobject obj, jlong ctx)
+{
+	return xmp_prev_position((xmp_context)ctx);
+}
+
+METHOD(int, setPosition) (JNIEnv *env, jobject obj, jlong ctx, jint num)
+{
+	return xmp_set_position((xmp_context)ctx, num);
+}
+
+METHOD(void, scanModule) (JNIEnv *env, jobject obj, jlong ctx)
+{
+	xmp_scan_module((xmp_context)ctx);
+}
+
+METHOD(void, stopModule) (JNIEnv *env, jobject obj, jlong ctx)
+{
+	return xmp_stop_module((xmp_context)ctx);
+}
+
+METHOD(void, restartModule) (JNIEnv *env, jobject obj, jlong ctx)
+{
+	return xmp_restart_module((xmp_context)ctx);
+}
+
+METHOD(int, seekTime) (JNIEnv *env, jobject obj, jlong ctx, jint time)
+{
+	return xmp_seek_time((xmp_context)ctx, time);
+}
+
+METHOD(int, channelMute) (JNIEnv *env, jobject obj, jlong ctx, jint chn, jint val)
+{
+	return xmp_channel_mute((xmp_context)ctx, chn, val);
+}
+
+METHOD(int, channelVol) (JNIEnv *env, jobject obj, jlong ctx, jint chn, jint val)
+{
+	return xmp_channel_vol((xmp_context)ctx, chn, val);
+}
+
+
 /*
  * Helpers
  */
