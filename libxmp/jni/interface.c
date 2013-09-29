@@ -205,11 +205,11 @@ METHOD(jobjectArray, getFormatList) (JNIEnv *env, jobject obj)
 	list = xmp_get_format_list();
 	for (i = 0; list[i]; i++);
 	
-	ret= (jobjectArray)(*env)->NewObjectArray(env, i,  
+	ret = (jobjectArray)(*env)->NewObjectArray(env, i,  
 				(*env)->FindClass(env, "java/lang/String"),  
 				(*env)->NewStringUTF(env, ""));  
 
-	for (i = 0; i < 5; i++) {  
+	while (i--) {  
 		(*env)->SetObjectArrayElement(env, ret, i,
 				(*env)->NewStringUTF(env, list[i]));  
 	} 

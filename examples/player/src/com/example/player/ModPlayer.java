@@ -64,6 +64,15 @@ public class ModPlayer {
 
 	public static void main(String[] args) {
 		System.out.println("Libxmp player test");
+		
+		if (args[0].equals("-L")) {
+			String[] list = Player.getFormatList();
+			for (int i = 0; i < list.length; i++) {
+				System.out.printf("%d:%s\n", i + 1, list[i]);
+			}
+			System.exit(0);
+		}
+		
 		ModPlayer modPlayer = new ModPlayer();
 		try {
 			modPlayer.run(args);
