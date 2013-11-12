@@ -77,7 +77,20 @@ public class Module {
 		
 		for (int i = 0; i < this.pat; i++) {
 			this.xxp[i] = new Pattern(this);
-			//Xmp.getPatternData(ctx, this.xxp[i], i);
+			Xmp.getPatternData(ctx, this.xxp[i], i);
+		}
+		
+		for (int i = 0; i < this.trk; i++) {
+			this.xxt[i] = new Track();
+			Xmp.getTrackData(ctx, this.xxt[i], i);
+		}
+		
+		for (int i = 0; i < this.ins; i++) {
+			
+		}
+		
+		for (int i = 0; i < this.smp; i++) {
+			
 		}
 
 	}

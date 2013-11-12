@@ -43,6 +43,15 @@ public class Xmp {
 	static final int ERROR_SYSTEM = 6;
 	static final int ERROR_INVALID = 7;
 	static final int ERROR_STATE = 8;
+	
+	// sample flags
+	public static final int SAMPLE_16BIT = (1 << 0);		/* 16bit sample */
+	public static final int SAMPLE_LOOP = (1 << 1);			/* Sample is looped */
+	public static final int SAMPLE_LOOP_BIDIR = (1 << 2);	/* Bidirectional sample loop */
+	public static final int SAMPLE_LOOP_REVERSE = (1 << 3);	/* Backwards sample loop */
+	public static final int SAMPLE_LOOP_FULL = (1 << 4);	/* Play full sample before looping */
+	public static final int SAMPLE_SYNTH = (1 << 15);		/* Data contains synth patch */
+
 
 	static final String[] errorString = {
 		"No error",
@@ -87,6 +96,7 @@ public class Xmp {
 	native static void getModData(long ctx, Module mod);
 	native static void getInstrumentData(long ctx, Instrument instrument, int num);
 	native static void getPatternData(long ctx, Pattern pattern, int num);
+	native static void getTrackData(long ctx, Track track, int num);
 
 	static {
 		System.loadLibrary("xmp-jni");

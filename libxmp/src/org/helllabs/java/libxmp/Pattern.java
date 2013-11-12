@@ -7,6 +7,7 @@ public class Pattern {
 	
 	public Pattern(Module mod) {
 		this.mod = mod;
+		this.index = new int[mod.chn];
 	}
 	
 	public int getRows() {
@@ -30,6 +31,7 @@ public class Pattern {
 	}
 	
 	public Event getEvent(int row, int chn, Event event) {
-		return event;
+		final Track track = mod.getTrack(index[chn]);
+		return track.getEvent(row, event);
 	}
 }

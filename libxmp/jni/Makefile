@@ -38,5 +38,6 @@ $(DLL): $(OBJS)
 $(DYLIB): $(LOBJS)
 	$(LD) $(LDFLAGS) -dynamiclib -o $@ $(LOBJS) $(LIBS)
 
-
+clean:
+	rm -f core *~ $(LOBJS) $(SHLIB) $(DYLIB) $(DLL)
 

@@ -65,6 +65,11 @@ public class ModPlayer {
 	public static void main(String[] args) {
 		System.out.println("Libxmp player test");
 		
+		if (args.length == 0) {
+			System.out.println("No modules to play.");
+			System.exit(1);
+		}
+		
 		if (args[0].equals("-L")) {
 			String[] list = Player.getFormatList();
 			for (int i = 0; i < list.length; i++) {

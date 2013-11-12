@@ -366,6 +366,8 @@ METHOD(void, getPatternData) (JNIEnv *env, jobject obj, jlong ctx, jobject patte
 	struct xmp_pattern *xxp;
 	jclass patternClass;
 	jfieldID field;
+	jintArray array;
+	int *data;
 
 	xmp_get_module_info((xmp_context)ctx, &mi);
 	xxp = mi.mod->xxp[num];
@@ -376,4 +378,33 @@ METHOD(void, getPatternData) (JNIEnv *env, jobject obj, jlong ctx, jobject patte
 	field = (*env)->GetFieldID(env, patternClass, "rows", "I");
 	(*env)->SetIntField(env, pattern, field, xxp->rows);
 
+	field = (*env)->GetFieldID(env, patternClass, "index", "[I");
+	array = (*env)->GetObjectField(env, pattern, field);
+	data = (*env)->GetIntArrayElements(env, array, 0);
+	memcpy(data, xxp->index, mi.mod->chn * sizeof (int));
+	(*env)->ReleaseIntArrayElements(env, array, data, 0);
+}
+
+METHOD(void, getTrackData) (JNIEnv *env, jobject obj, jlong ctx, jobject track, jint num)
+{
+	struct xmp_module_info mi;
+	struct xmp_track *xxt;
+	jclass trackClass;
+	jfieldID field;
+	jobject buffer;
+
+	xmp_get_module_info((xmp_context)ctx, &mi);
+	xxt = mi.mod->xxt[num];
+
+	trackClass = (*env)->FindClass(env,
+                       		"org/helllabs/java/libxmp/Track");
+
+	field = (*env)->GetFieldID(env, trackClass, "rows", "I");
+	(*env)->SetIntField(env, track, field, xxt->rows);
+
+	field = (*env)->GetFieldID(env, trackClass, "data",
+				"Ljava/nio/ByteBuffer;");
+	buffer = (*env)->NewDirectByteBuffer(env, xxt->event,
+				sizeof (struct xmp_event) * xxt->rows);
+	(*env)->SetObjectField(env, track, field, buffer);
 }
