@@ -1,5 +1,5 @@
 /*
- * Example mod player using libxmp.jar.
+ * Example mod player using Libxmp.jar.
  *  
  * This code is in the public domain.
  */
@@ -8,17 +8,18 @@ package com.example.showpattern;
 
 import java.io.IOException;
 
-import org.helllabs.java.libxmp.Event;
-import org.helllabs.java.libxmp.Module;
-import org.helllabs.java.libxmp.Pattern;
+import org.helllabs.libxmp.Module.Event;
+import org.helllabs.libxmp.Module;
+import org.helllabs.libxmp.Player;
+import org.helllabs.libxmp.Module.Pattern;
 
 
 public class ShowPattern {
 
-	private void showHeader(Module mod) {
-		System.out.println("Module name  : " + mod.name);
-		System.out.println("Module type  : " + mod.type);
-		System.out.println("Module length: " + mod.len + " patterns");
+	private void showHeader(Module module) {
+		System.out.println("Module name  : " + module.getName());
+		System.out.println("Module type  : " + module.getType());
+		System.out.println("Module length: " + module.getLength() + " patterns");
 	}
 	
 	private String formatNote(int n) {
@@ -44,11 +45,12 @@ public class ShowPattern {
 	}
 
 	private void run(String path, int num) throws IOException {
-		Module mod = new Module(path);
+		Player player = new Player();
+		Module module = player.loadModule(path);
 		
-		showHeader(mod);
+		showHeader(module);
 		
-		Pattern pattern = mod.getPattern(num);
+		Pattern pattern = module.getPattern(num);
 		Event event = new Event();
 		
 		System.out.println("\nPATTERN " + num);

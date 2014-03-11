@@ -1,24 +1,23 @@
 /*
- * Example mod player using libxmp.jar.
+ * Example mod player using Coremod.jar.
  *  
  * This code is in the public domain.
  */
 
-package com.example.player;
+package com.example;
 
-import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-
-import javax.sound.sampled.*;
-
-import org.helllabs.java.libxmp.Xmp;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
 
 
 public class AudioPlay {
-	SourceDataLine line;
-	byte[] myBuffer;
+	private final SourceDataLine line;
 
-	public AudioPlay(int freq) throws LineUnavailableException {
+	public AudioPlay(final int freq) throws LineUnavailableException {
 		final boolean isBigEndian = ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN;
 		final AudioFormat format = new AudioFormat(freq, 16, 2, true, isBigEndian);
 		final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
@@ -31,19 +30,16 @@ public class AudioPlay {
 		line = (SourceDataLine)AudioSystem.getLine(info);
 		line.open(format);  
 		line.start();
-		
-		myBuffer = new byte[Xmp.MAX_FRAMESIZE];
 	}
 
 	@Override
-	protected void finalize() {
+	protected void finalize() throws Throwable {
 		close();
+		super.finalize();
 	}
 	
-	public void play(ByteBuffer buffer, int bufferSize) {	
-		buffer.clear();
-		buffer.get(myBuffer, 0, bufferSize);
-		line.write(myBuffer, 0, bufferSize);
+	public void play(final byte[] buffer, final int bufferSize) {	
+		line.write(buffer, 0, bufferSize);
 	}
 	
 	public void close() {
