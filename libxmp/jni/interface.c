@@ -71,7 +71,7 @@ static struct channel_info {
 	jfieldID event;
 } channel_info;
 
-static struct event_info {
+static struct event_data {
 	jclass class;
 	jfieldID note;
 	jfieldID ins;
@@ -80,7 +80,7 @@ static struct event_info {
 	jfieldID fxp;
 	jfieldID f2t;
 	jfieldID f2p;
-} event_info;
+} event_data;
 
 static struct mod_data {
 	jclass class;
@@ -94,6 +94,13 @@ static struct mod_data {
 	jfieldID initialBpm;
 	jfieldID length;
 } mod_data;
+
+static struct pattern_data {
+	jclass class;
+	jfieldID ctx;
+	jfieldID num;
+	jfieldID numRows;
+} pattern_data;
 
 static struct instrument_data {
 	jclass class;
@@ -164,7 +171,7 @@ static void init_channel_info_fields(JNIEnv *env)
 
 	GET_FIELD(channel_info, period, "I");
 	GET_FIELD(channel_info, position, "I");
-	GET_FIELD(channel_info, pitchbend, "I");
+	GET_FIELD(channel_info, pitchbend, "S");
 	GET_FIELD(channel_info, note, "B");
 	GET_FIELD(channel_info, instrument, "B");
 	GET_FIELD(channel_info, sample, "B");
@@ -173,20 +180,20 @@ static void init_channel_info_fields(JNIEnv *env)
 	GET_FIELD(channel_info, event, "Lorg/helllabs/libxmp/Module$Event;");
 }
 
-static void init_event_info_fields(JNIEnv *env)
+static void init_event_data_fields(JNIEnv *env)
 {
-	if (event_info.class != NULL)
+	if (event_data.class != NULL)
 		return;
 
-	GET_CLASS(event_info, "org/helllabs/libxmp/Module$Event");
+	GET_CLASS(event_data, "org/helllabs/libxmp/Module$Event");
 
-	GET_FIELD(event_info, note, "B");
-	GET_FIELD(event_info, ins, "B");
-	GET_FIELD(event_info, vol, "B");
-	GET_FIELD(event_info, fxt, "B");
-	GET_FIELD(event_info, fxp, "B");
-	GET_FIELD(event_info, f2t, "B");
-	GET_FIELD(event_info, f2p, "B");
+	GET_FIELD(event_data, note, "I");
+	GET_FIELD(event_data, ins, "I");
+	GET_FIELD(event_data, vol, "I");
+	GET_FIELD(event_data, fxt, "I");
+	GET_FIELD(event_data, fxp, "I");
+	GET_FIELD(event_data, f2t, "I");
+	GET_FIELD(event_data, f2p, "I");
 }
 
 static void init_mod_data_fields(JNIEnv *env)
@@ -205,6 +212,18 @@ static void init_mod_data_fields(JNIEnv *env)
 	GET_FIELD(mod_data, initialSpeed, "I");
 	GET_FIELD(mod_data, initialBpm, "I");
 	GET_FIELD(mod_data, length, "I");
+}
+
+static void init_pattern_data_fields(JNIEnv *env)
+{
+	if (pattern_data.class != NULL)
+		return;
+
+	GET_CLASS(pattern_data, "org/helllabs/libxmp/Module$Pattern");
+
+	GET_FIELD(pattern_data, ctx, "J");
+	GET_FIELD(pattern_data, num, "I");
+	GET_FIELD(pattern_data, numRows, "I");
 }
 
 static void init_instrument_data_fields(JNIEnv *env)
@@ -243,8 +262,9 @@ METHOD(jlong, createContext) (JNIEnv *env, jobject obj)
 	/* Cache class field IDs */
 	init_frame_info_fields(env);
 	init_channel_info_fields(env);
-	init_event_info_fields(env);
+	init_event_data_fields(env);
 	init_mod_data_fields(env);
+	init_pattern_data_fields(env);
 	init_instrument_data_fields(env);
 	init_sample_data_fields(env);
 
@@ -361,7 +381,7 @@ METHOD(jobject, getFrameInfo) (JNIEnv *env, jobject obj, jlong ctx, jobject info
 
 		(*env)->SetIntField(env, obj, channel_info.period, ci->period);
 		(*env)->SetIntField(env, obj, channel_info.position, ci->position);
-		(*env)->SetIntField(env, obj, channel_info.pitchbend, ci->pitchbend);
+		(*env)->SetShortField(env, obj, channel_info.pitchbend, ci->pitchbend);
 		(*env)->SetByteField(env, obj, channel_info.note, ci->note);
 		(*env)->SetByteField(env, obj, channel_info.instrument, ci->instrument);
 		(*env)->SetByteField(env, obj, channel_info.sample, ci->sample);
@@ -372,13 +392,13 @@ METHOD(jobject, getFrameInfo) (JNIEnv *env, jobject obj, jlong ctx, jobject info
 
 		event = (*env)->GetObjectField(env, obj, channel_info.event);
 
-		(*env)->SetByteField(env, event, event_info.note, ci->event.note);
-		(*env)->SetByteField(env, event, event_info.ins, ci->event.ins);
-		(*env)->SetByteField(env, event, event_info.vol, ci->event.vol);
-		(*env)->SetByteField(env, event, event_info.fxt, ci->event.fxt);
-		(*env)->SetByteField(env, event, event_info.fxp, ci->event.fxp);
-		(*env)->SetByteField(env, event, event_info.f2t, ci->event.f2t);
-		(*env)->SetByteField(env, event, event_info.f2p, ci->event.f2p);
+		(*env)->SetIntField(env, event, event_data.note, ci->event.note);
+		(*env)->SetIntField(env, event, event_data.ins, ci->event.ins);
+		(*env)->SetIntField(env, event, event_data.vol, ci->event.vol);
+		(*env)->SetIntField(env, event, event_data.fxt, ci->event.fxt);
+		(*env)->SetIntField(env, event, event_data.fxp, ci->event.fxp);
+		(*env)->SetIntField(env, event, event_data.f2t, ci->event.f2t);
+		(*env)->SetIntField(env, event, event_data.f2p, ci->event.f2p);
 
 		(*env)->DeleteLocalRef(env, obj);
 	}
@@ -506,6 +526,69 @@ METHOD(void, getModData) (JNIEnv *env, jobject obj, jlong ctx, jobject mod)
 	(*env)->SetIntField(env, mod, mod_data.initialSpeed, mi.mod->spd);
 	(*env)->SetIntField(env, mod, mod_data.initialBpm, mi.mod->bpm);
 	(*env)->SetIntField(env, mod, mod_data.length, mi.mod->len);
+}
+
+METHOD(void, getEventData) (JNIEnv *env, jobject obj, jlong ctx, jint pat, jint row, jint chn, jobject event)
+{
+	struct xmp_module_info mi;
+	struct xmp_pattern *xxp;
+	struct xmp_event *e;
+
+	xmp_get_module_info((xmp_context)ctx, &mi);
+
+	if (pat >= mi.mod->pat) {
+		jclass ex = (*env)->FindClass(env,
+				"java/lang/IndexOutOfBoundsException");
+		(*env)->ThrowNew(env, ex, "Invalid pattern number");
+		return;
+	}
+
+	xxp = mi.mod->xxp[pat];
+
+	if (row >= xxp->rows) {
+		jclass ex = (*env)->FindClass(env,
+				"java/lang/IndexOutOfBoundsException");
+		(*env)->ThrowNew(env, ex, "Invalid Row number");
+		return;
+	}
+
+	if (chn >= mi.mod->chn) {
+		jclass ex = (*env)->FindClass(env,
+				"java/lang/IndexOutOfBoundsException");
+		(*env)->ThrowNew(env, ex, "Invalid channel number");
+		return;
+	}
+
+	e = &mi.mod->xxt[mi.mod->xxp[pat]->index[chn]]->event[row];
+
+	(*env)->SetIntField(env, event, event_data.note, e->note);
+	(*env)->SetIntField(env, event, event_data.ins, e->ins);
+	(*env)->SetIntField(env, event, event_data.vol, e->vol);
+	(*env)->SetIntField(env, event, event_data.fxt, e->fxt);
+	(*env)->SetIntField(env, event, event_data.fxp, e->fxp);
+	(*env)->SetIntField(env, event, event_data.f2t, e->f2t);
+	(*env)->SetIntField(env, event, event_data.f2p, e->f2p);
+}
+
+METHOD(void, getPatternData) (JNIEnv *env, jobject obj, jlong ctx, jint num, jobject pattern)
+{
+	struct xmp_module_info mi;
+	struct xmp_pattern *xxp;
+
+	xmp_get_module_info((xmp_context)ctx, &mi);
+
+	if (num >= mi.mod->pat) {
+		jclass ex = (*env)->FindClass(env,
+				"java/lang/IndexOutOfBoundsException");
+		(*env)->ThrowNew(env, ex, "Invalid pattern number");
+		return;
+	}
+
+	xxp = mi.mod->xxp[num];
+
+	(*env)->SetLongField(env, pattern, pattern_data.ctx, ctx);
+	(*env)->SetIntField(env, pattern, pattern_data.num, num);
+	(*env)->SetIntField(env, pattern, pattern_data.numRows, xxp->rows);
 }
 
 METHOD(void, getInstrumentData) (JNIEnv *env, jobject obj, jlong ctx, jint num, jobject instrument)

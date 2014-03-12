@@ -51,7 +51,7 @@ public class FrameInfo {
 	public static class ChannelInfo {
 		private int period;			// Sample period
 		private int position;		// Sample position
-		private int pitchbend;		// Linear bend from base note
+		private short pitchbend;	// Linear bend from base note
 		private byte note;			// Current base note number
 		private byte instrument;	// Current instrument number
 		private byte sample;		// Current sample number
@@ -71,24 +71,24 @@ public class FrameInfo {
 			return pitchbend;
 		}
 		
-		public byte getNote() {
-			return note;
+		public int getNote() {
+			return (int)note & 0xff;
 		}
 		
-		public byte getInstrument() {
-			return instrument;
+		public int getInstrument() {
+			return (int)instrument & 0xff;
 		}
 		
-		public byte getSample() {
-			return sample;
+		public int getSample() {
+			return (int)sample & 0xff;
 		}
 		
-		public byte getVolume() {
-			return volume;
+		public int getVolume() {
+			return (int)volume & 0xff;
 		}
 		
-		public byte getPan() {
-			return pan;
+		public int getPan() {
+			return (int)pan & 0xff;
 		}
 		
 		public Module.Event getEvent() {

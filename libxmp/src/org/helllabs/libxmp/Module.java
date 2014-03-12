@@ -67,14 +67,28 @@ public class Module {
 	}
 
 	public static class Event {
-		public byte note;
-		public byte ins;
-		public byte vol;
-		public byte fxt;
-		public byte fxp;
-		public byte f2t;
-		public byte f2p;
-		public byte flag;
+		public int note;
+		public int ins;
+		public int vol;
+		public int fxt;
+		public int fxp;
+		public int f2t;
+		public int f2p;
+	}
+	
+	public static class Pattern {
+		private long ctx;
+		private int num;
+		private int numRows;
+		
+		public Event eventData(final int row, final int chn, final Event event) {
+			Xmp.getEventData(ctx, num, row, chn, event);
+			return event;
+		}
+		
+		public int getNumRows() {
+			return numRows;
+		}
 	}
 	
 	public static class Instrument {
@@ -177,16 +191,24 @@ public class Module {
 
 		return info;
 	}
+		
+	public Pattern patternData(final int num) {
+		return patternData(num, new Pattern());
+	}
+	
+	public Pattern patternData(final int num, final Pattern pattern) {
+		Xmp.getPatternData(ctx, num, pattern);
+		return pattern;
+	}
 	
 	/**
 	 * Retrieve instrument data.
 	 * 
 	 * @param num The number of the instrument to retrieve, starting at 0. 
-	 * @return The corresponding instrument object.
+	 * @return The instrument object.
 	 */
 	public Instrument instrumentData(final int num) {
-		final Instrument instrument = new Instrument();
-		return instrumentData(num, instrument);
+		return instrumentData(num, new Instrument());
 	}
 	
 	/**
@@ -194,7 +216,7 @@ public class Module {
 	 * 
 	 * @param num The number of the instrument to retrieve, starting at 0.
 	 * @param instrument The object to be used to retrieve instrument data.
-	 * @return The corresponding instrument object.
+	 * @return The instrument object.
 	 */
 	public Instrument instrumentData(final int num, final Instrument instrument) {
 		Xmp.getInstrumentData(ctx, num, instrument);
@@ -205,11 +227,10 @@ public class Module {
 	 * Retrieve sample data.
 	 * 
 	 * @param num The number of the sample to retrieve, starting at 0.
-	 * @return The corresponding Sample object.
+	 * @return The sample object.
 	 */
 	public Sample sampleData(final int num) {
-		final Sample sample = new Sample();
-		return sampleData(num, sample);
+		return sampleData(num, new Sample());
 	}
 	
 	/**
@@ -217,7 +238,7 @@ public class Module {
 	 * 
 	 * @param num The number of the sample to retrieve, starting at 0.
 	 * @param sample The object to be used to retrieve sample data.
-	 * @return The corresponding sample object.
+	 * @return The sample object.
 	 */
 	public Sample sampleData(final int num, final Sample sample) {
 		Xmp.getSampleData(ctx, num, sample);

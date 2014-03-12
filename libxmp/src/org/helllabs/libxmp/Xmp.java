@@ -150,10 +150,12 @@ public final class Xmp {
 	native static int getErrno();
 	native static String getStrError(int err);
 	native static void getModData(long ctx, Module mod);
+	native static void getEventData(long ctx, int pat, int row, int chn, Module.Event pattern);
+	native static void getPatternData(long ctx, int num, Module.Pattern pattern);
 	native static void getInstrumentData(long ctx, int num, Module.Instrument instrument);
 	native static void getSampleData(long ctx, int num, Module.Sample sample);
 
 	static {
-		System.loadLibrary("libxmp-jni");
+		System.loadLibrary("xmp-jni");
 	}
 }
