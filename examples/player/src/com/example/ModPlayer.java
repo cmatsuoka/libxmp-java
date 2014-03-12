@@ -84,7 +84,7 @@ public class ModPlayer {
 	}
 
 	public static void main(final String[] args) {
-		System.out.println("Coremod player test");
+		System.out.println("Libxmp player test");
 
 		if (args.length == 0) {
 			System.out.println("No modules to play.");
