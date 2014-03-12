@@ -186,7 +186,7 @@ public class Module {
 		if (code == -Xmp.ERROR_SYSTEM) {
 			throw new IOException(Xmp.getStrError(Xmp.getErrno()));
 		} else if (code < 0) {
-			throw new IOException(Xmp.errorString[-code]);
+			throw new IOException(Xmp.ERROR_STRING[-code]);
 		}
 
 		return info;

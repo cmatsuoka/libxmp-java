@@ -35,7 +35,7 @@ public class Mixer {
 			
 		
 		case -Xmp.ERROR_INTERNAL:
-			throw new RuntimeException(Xmp.errorString[-code]);
+			throw new RuntimeException(Xmp.ERROR_STRING[-code]);
 		
 		}
 	}

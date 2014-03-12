@@ -76,7 +76,7 @@ public class Player {
 	public Module loadModule(final String path) throws IOException {
 		final int code = Xmp.loadModule(ctx, path);
 		if (code < 0) {
-			throw new IOException(Xmp.errorString[-code]);
+			throw new IOException(Xmp.ERROR_STRING[-code]);
 		}
 		
 		module = new Module(this);
@@ -108,7 +108,7 @@ public class Player {
 			break;
 		case -Xmp.ERROR_SYSTEM:
 		case -Xmp.ERROR_INTERNAL:
-			throw new RuntimeException(Xmp.errorString[-code]);
+			throw new RuntimeException(Xmp.ERROR_STRING[-code]);
 		case -Xmp.ERROR_INVALID:
 			throw new IllegalArgumentException("Invalid sampling rate " + samplingRate + "Hz");
 		case -Xmp.ERROR_STATE:
@@ -172,7 +172,7 @@ public class Player {
 		return Xmp.getPlayer(ctx, Xmp.PLAYER_SMIX_VOLUME);
 	}
 
-	static private void checkParameterSet(int code) {
+	static private void checkParameterSet(final int code) {
 		switch (code) {
 		case -Xmp.ERROR_INVALID:
 			throw new IllegalArgumentException();

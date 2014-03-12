@@ -98,7 +98,7 @@ public final class Xmp {
 	public static final int SAMPLE_LOOP_FULL = 1 << 4;	// Play full sample before looping
 
 
-	static final String[] errorString = {
+	static final String[] ERROR_STRING = {
 		"No error",
 		"End of module",
 		"Internal error",
